@@ -1,0 +1,50 @@
+server:
+  port: 8443
+  ssl:
+    enabled: ${SERVER_SSL_ENABLED:false}
+    key-store:  ${SERVER_SSL_KEYSTORE}
+    key-store-password: ${SERVER_SSL_KEYSTORE_PASSWORD}
+    key-store-type: PKCS12
+    key-alias: tomcat
+
+spring:
+  profiles:
+    active: debug
+
+  flyway:
+    validate-on-migrate: false
+    baseline-on-migrate: true
+    baseline-version:   0
+    default-schema:     pioner
+    schemas:            pioner
+    create-schemas:     true
+
+
+  datasource:
+    url:      ${SPRING_DATASOURCE_URL}?currentSchema=pioner
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.format_sql:   true
+      hibernate.default_schema: pioner
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 10m
+  data:
+    redis:
+      url: ${REDIS_URL}
+
+
+jwt:
+  secret:     ${JWT_SECRET}
+  expiration: 86400
+
+springdoc:
+  api-docs.enabled: true
+  swagger-ui.path: /swagger-ui.html

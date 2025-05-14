@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	
+	<springProfile name="dev">
+		<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+			<encoder>
+				<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+			</encoder>
+		</appender>
+		
+		<root level="DEBUG">
+			<appender-ref ref="CONSOLE"/>
+		</root>
+	</springProfile>
+	
+	<springProfile name="prod">
+		<appender name="FILE"
+				  class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<file>/var/log/pioner-pixel/app.log</file>
+			
+			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<fileNamePattern>/var/log/pioner-pixel/app.%d{yyyy-MM-dd}.gz
+				</fileNamePattern>
+				<maxHistory>14</maxHistory>
+			</rollingPolicy>
+			
+			<encoder class="net.logstash.logback.encoder.LogstashEncoder">
+				<includeMdcKeyName>correlationId</includeMdcKeyName>
+			</encoder>
+		</appender>
+		
+		<root level="INFO">
+			<appender-ref ref="FILE"/>
+		</root>
+	</springProfile>
+
+</configuration>
